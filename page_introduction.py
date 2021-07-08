@@ -22,7 +22,7 @@ def page_introduction():
   sns.set_theme(style="ticks")
   sns.set_style("whitegrid")
   
-  path_dk = "/content/drive/MyDrive/Takotsubo_Prognosis/Data/modified_data.csv"
+  path_dk = "data/modified_data.csv"
   df = pd.read_csv(path_dk)
   
 
