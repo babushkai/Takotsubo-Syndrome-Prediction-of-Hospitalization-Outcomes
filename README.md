@@ -1,4 +1,4 @@
-# Long-Term-Prognosis-of-Patients-With-Takotsubo-Syndrome
+# Takotsubo-Syndrome:Prediction of Hospitalization Outcomes
 
 (According to the data we are going to be able to get)
 Takotsubo in the context of the COVID-19 pandemic
