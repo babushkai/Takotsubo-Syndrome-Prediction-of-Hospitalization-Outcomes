@@ -1,8 +1,9 @@
+
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar 17 11:54:36 2021
+Created on Wed July 10  11:54:36 2021
 
-@author: Robert https://github.com/rdzudzar
+@author: Daisuke Kuwabara&Nesrine Benanteur  https://github.com/kwdaisuke
 """
 # Awesome Streamlit
 import streamlit as st
@@ -18,15 +19,15 @@ np.random.seed(1)
 
 
 # Set the default elements on the sidebar
-st.set_page_config(page_title='DistributionAnalyser')
+st.set_page_config(page_title='LongTime Prognosis for Takotsubo Syndrome')
 
 logo, name = st.sidebar.beta_columns(2)
 with logo:
-    image = 'https://raw.githubusercontent.com/rdzudzar/DistributionAnalyser/main/images/logo_da.png?token=AIAWV2ZRCFKYM42DVFTD3OLAN3CQK'
+    image =   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtrDcEEvdSPDiKyg4FiTsxIgyMb-klnNGP2Q&usqp=CAU"
     st.image(image, use_column_width=True)
 with name:
     st.markdown("<h1 style='text-align: left; color: grey;'> \
-                Distribution Analyser </h1>", unsafe_allow_html=True)
+                Long-Time Prognosis for Takotsubo Syndrome </h1>", unsafe_allow_html=True)
 
 st.sidebar.write(" ")
 
@@ -43,8 +44,8 @@ def main():
 
     pages = {
         "Introduction": page_introduction,
-        "Explore distributions": page_explore,
-        "Fit distributions": page_fit,
+        "Data Analyze?": page_explore,
+        "Fit prediction model": page_fit,
     }
 
     st.sidebar.title("Main options")
@@ -59,9 +60,9 @@ def main():
     st.sidebar.header("About")
     st.sidebar.warning(
             """
-            Distribution Analyser app is created and maintained by 
-            **Robert Dzudzar**. If you like this app please star its
-            [**GitHub**](https://github.com/rdzudzar/DistributionAnalyser)
+            Takotsubo Analysis app is created and maintained by 
+            **Daisuke Kuwabara&Nesrine Benanteur**. If you like this app please star its
+            [**GitHub**](https://github.com/kwdaisuke/)
             repo, share it and feel free to open an issue if you find a bug 
             or if you want some additional features.
             """
