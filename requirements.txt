@@ -5,3 +5,4 @@ numpy >= 1.18.5
 scipy >= 1.6.1
 cmasher >= 1.5.10
 bokeh == 2.2.2
+seaborn
