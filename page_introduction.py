@@ -22,7 +22,7 @@ def page_introduction():
   sns.set_theme(style="ticks")
   sns.set_style("whitegrid")
   
-  path_dk = "data/modified_data.csv"
+  path_dk = "/content/drive/MyDrive/Takotsubo_Prognosis/Data/modified_data.csv"
   df = pd.read_csv(path_dk)
   
 
@@ -46,7 +46,7 @@ def page_introduction():
     st.write(df.head())
 
   with st.beta_container():
-    st.header("Patient Description")
+    st.header("1. Demographics")
   ################################
   st.write("")
   row1, row2, row3 = st.beta_columns(3)
@@ -71,7 +71,6 @@ def page_introduction():
         sns.histplot(x="BMI",data=df, kde=True)
         plt.title("Patient's BMI", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
       return fig2
-
     plot=BMI_hist()
     st.pyplot(plot, clear_figure=True)
 
@@ -87,16 +86,11 @@ def page_introduction():
   ############################################
 
   with st.beta_container():
-    st.header("Medical History")
+    st.header("2. Medical History")
   st.write("")
-  row1, row2 = st.beta_columns(2)
-  # with row1, _lock:
-  #   cardio_history_alcoolisme = df.iloc[:, -2:].fillna(0)
-  #   medical_history = pd.concat([df.loc[:, "depression_anxiety_history":"COPD_asthma" ], cardio_history_alcoolisme], axis=1)
-  #   fig=medical_history.sum().sort_values().plot.barh()
-  #   st.pyplot(fig, clear_figure=True)
+  row1, row2, row3 = st.beta_columns(3)
 
-  with row2, _lock:
+  with row1, _lock:
     cardio_history_alcoolisme = df.iloc[:, -2:].fillna(0)
     medical_history = pd.concat([df.loc[:, "depression_anxiety_history":"COPD_asthma"], cardio_history_alcoolisme], axis=1)
     dff = medical_history.sum().sort_values().reset_index().rename(columns={"index": "col", 0:"values"})
@@ -109,31 +103,92 @@ def page_introduction():
       return fig
     st.pyplot(medical_hist_sum(), clear_figure=True)
 
+  with row2, _lock:
+    st.header("3. Treatment")
+    df.columns.get_loc("ttt entrée = ttt antérieur") # Get the integer index of the specified column
+    treatment_before = df.iloc[: , 25: 33].replace(np.nan, 0) # Exclude ttt entrée = ttt antérieur
+    treatment_after = df.iloc[:,  56:65].replace(np.nan, 0)
+    treatment_before["anxiolytiques"] =0.0 # Add anxiolytiques for treatment_before
+    sum_treatment = pd.concat([treatment_before.sum(axis=0), treatment_after.sum(axis=0)], axis=1)
+    sum_treatment.rename(columns = {0:"Total_Sum_Before ", 1:"Total_Sum_After"}, inplace=True)
+    def Treatment_count():
+      fig2,ax = plt.subplots()
+      with st.echo(): 
+        ax = sum_treatment.plot.bar(figsize=(12, 7), rot=30)
+        for p in ax.patches:
+          ax.annotate(str(p.get_height()), (p.get_x() * 1.005, p.get_height() * 1.005))
+        plt.title("Comparison of total count of respective treatment before and after the hospitalization", fontsize=14, fontweight="bold")
+      return fig2
+    st.pyplot(Treatment_count(), clear_figure=True)
+
+    with row3, _rock:
+      def correlation():
+        fig, ax = plt.subplots()
+        with st.echo():
+          treatment_before.iloc[:, :8].corr(method="kendall").style.background_gradient(cmap="coolwarm")
+          treatment_after.corr(method="kendall").style.background_gradient(cmap="coolwarm")
+        return fig
+      st.pyplot(corr_before(), clear_figure=True)
 
 
-  ##############################
+
+
   with st.beta_container():
-    st.header("Treatment")
+    st.header("4. LVEF")
   ################################
   st.write("")
-  row1, row2 = st.beta_columns(2)
-
-  #df.columns.get_loc("ttt entrée = ttt antérieur") # Get the integer index of the specified column
-  treatment_before = df.iloc[: , 25: 33].replace(np.nan, 0) # Exclude ttt entrée = ttt antérieur
-  treatment_after = df.iloc[:,  56:65].replace(np.nan, 0)
-  treatment_before["anxiolytiques"] =0.0 # Add anxiolytiques for treatment_before
-  sum_treatment = pd.concat([treatment_before.sum(axis=0), treatment_after.sum(axis=0)], axis=1)
-  sum_treatment.rename(columns = {0:"Total_Sum_Before ", 1:"Total_Sum_After"}, inplace=True)
+  row1, row2, row3 = st.beta_columns(3)
 
   with row1, _lock:
-    fig, ax = plt.subplots()
-    st.write("We can observe many patients are treated ...")
-    def sum_treatment():
-      ax = sum_treatment.plot.bar(figsize=(12, 7), rot=30)
-      for p in ax.patches:
-        ax.annotate(str(p.get_height()), (p.get_x() * 1.005, p.get_height() * 1.005))
+    LVEF = df.loc[:, "entry_LVEF":"out_LVEF"]; LVEF = LVEF.astype("float") ; LVEF.out_LVEF =LVEF.out_LVEF.replace("NaN", np.nan)
+    bin = [-np.inf, 40, 50, 55, np.inf]
+    LVEF["entry_LVEF_category"] = pd.cut(LVEF.entry_LVEF, bin, labels = "1 2 3 4".split(" ")) ; LVEF.notnull().sum()
+    diff = LVEF.dropna().out_LVEF - LVEF.dropna().entry_LVEF ; diff[diff <0]
+    
+    def LVEF_diff():
+      fig,ax = plt.subplots()
+      with st.echo(): 
+        diff.plot.hist() 
+        plt.title("Difference of LVEF", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
       return fig
-    st.pyplot(sum_treatment(), clear_figure=True)
+    plot=LVEF_diff()
+    st.pyplot(plot, clear_figure=True)
+
+  with row2, _lock:
+    biomarkers = pd.concat([df.loc[:, "entry_troponin": "NT_proBNP"], df.iloc[:, 65]], axis=1) 
+    biomarkers["NT_proBNP"] = biomarkers["NT_proBNP"].replace("23 289", "23289")  # Fill the blank 
+    def Biomarker():
+      fig2  ,ax = plt.subplots()
+      with st.echo(): 
+        biomarkers.troponin_peak.clip(biomarkers.troponin_peak.min(), upper_bound).plot.box()
+        biomarkers.NT_proBNP.astype("float").plot.box(figsize=(8, 6))
+        plt.title("Biomarker", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
+      return fig2
+    plot=Biomarker()
+    st.pyplot(plot, clear_figure=True)
+
+  with row3, _lock:
+    coronarography = df.loc[:, "coronarography": "healthy_coronary"]
+    not_examined = coronarography[coronarography.coronarography == 0]
+    yes_examined = coronarography[coronarography.coronarography == 1]
+    yes_examined_disease = yes_examined[yes_examined.coronary_disease ==1]
+    yes_examined_healthy = yes_examined[yes_examined.healthy_coronary ==1]
+    not_examined["coronarography_status"] = "not_examined"
+    yes_examined_disease["coronarography_status"] = "coronary_disease"
+    yes_examined_healthy["coronarography_status"] = "healthy"
+    coronarography_with_status = pd.concat([not_examined, yes_examined_disease, yes_examined_healthy], axis=0).sort_index()
+    a = pd.DataFrame(coronarography_with_status.coronarography_status.value_counts()).T.not_examined
+    b = pd.DataFrame(coronarography_with_status.coronarography_status.value_counts()).T[["healthy", "coronary_disease"]]
+    def coronarography():
+      fig,ax = plt.subplots()
+      with st.echo(): 
+        ax = pd.concat([pd.DataFrame(a), b], axis=0).plot(kind="bar", stacked=True)
+        ax.set_xticklabels(["non_examined", "examined"], rotation=30)   
+        plt.title("Coronarography", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
+      return fig
+    st.pyplot(coronarography(), clear_figure=True)
+  ############################################
+
 
 
 

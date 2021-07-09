@@ -3,7 +3,7 @@
 """
 Created on Wed Mar 17 11:54:36 2021
 
-@author: Daisuke Kuwabara & Nesrine Benanteur https://github.com/kwdaisuke/Long-Term-Prognosis-of-Patients-With-Takotsubo-Syndrome
+@author: Daisuke Kuwabara & Nesrine Benanteur https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes
 """
 # Package imports
 import streamlit as st
@@ -59,12 +59,16 @@ def page_explore():
             
             return slider_i
 
-
-        age="age"
-        BMI="BMI"
-        age = sliders(age, 0.0, 100.0, 30.0, 1.0)
-        BMI = sliders(BMI, 16.0, 40.0, 20.0, 0.5)
-        treatment_before = st.selectbox("Treatment before", ("beta_blockers", "IEC", "Antip Py12", "ARA_Ⅱ", "aspirin", "anti_P2Y12", "oral_anticoagulation", "statin", "antidepressant", "anxiolytiques"))
-        Anatomy = st.selectbox("Anatomy", ("Apycal", "medio_ventriculaire", "basale", "other"))
-        Rhythmic_abnormalities = st.selectbox("Rhythmic_abnormalities", ("ST_positive", "Long_QT", "Tneg_waves"))
-        Biomarkers = st.selectbox("Biomarkers", ("entry_troponine", "troponine_peak", "NT_proBNP", "CRP"))
+        sex = st.checkbox("SEX", ("Male", "Female"))
+        age = sliders("age", 0.0, 100.0, 30.0, 1.0)
+        BMI = sliders("BMI", 16.0, 40.0, 20.0, 0.5)
+        LVEF = sliders("entry_LVEF", (1.0, 80, 50, 1.0))
+        LVEF = sliders("out_LVEF", (1.0, 80, 50, 1.0))
+        treatment_before = st.selectbox("Treatment before", ("beta blockers", "IEC", "Antip Py12", "ARA_Ⅱ", "aspirin", "anti P2Y12", "oral anticoagulation", "statin", "antidepressant", "anxiolytiques"))
+        Anatomy = st.selectbox("Anatomy", ("apical type", "mid ventricular", "basale", "other"))
+        Stress_Factor = st.selectbox("Stress Factor", ("emotional stress", "physical stress"))
+        Rhythmic_Abnormalities = st.selectbox("Rhythmic Abnormalities", ("ST positive", "Long QT", "Tneg waves"))
+        Biomarkers = st.selectbox("Biomarkers", ("entry troponin", "troponin peak", "NT proBNP", "CRP"))
+        Coronarography = st.selectbox("Coronarography", ("coronary disease", "healthy coronary", "coronarography"))
+        Inhospital_Consequences = st.selectbox("Inhospital Consequences", ("RV harm", "hospital death", "ECMO", "cardiogenic shock", "thrombus LV", "ventricle arrhythmia", "atrium arrhythmia", "atrium arrhythmia"))
+        Medical_History = st.multiselect("Medical History", ("hypertension", "smoking", "dyslipidemia", "cancer history", "diabetes", "neurological_pathologies", "COPD_asthma", "depression_anxiety_history", "stroke_TIA", "cancer", "cardio history", "mental illness history", "alcoolism", "chronic kidney disease"))
