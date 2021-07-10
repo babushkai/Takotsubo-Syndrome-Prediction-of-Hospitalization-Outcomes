@@ -40,7 +40,7 @@ def page_explore():
     exploration of the continuous distributions that are available in SciPy.
     """
     import numpy as np
-    df_imputed=pd.read_csv("imputed_data.csv")
+    df_imputed=pd.read_csv("data/imputed_data.csv")
     Cardio_History_Alcoholism = df_imputed[["alcoolism", "Cardio_history"]].fillna(0) # NaN is 0 for the binary value?
     medical_history = pd.concat([df_imputed.loc[:, "depression_anxiety_history":"COPD_asthma" ], Cardio_History_Alcoholism], axis=1).columns.to_numpy()  
     stress_factor = df_imputed.loc[:, "stress_trigger": "ICM_Code"].columns.to_numpy()
