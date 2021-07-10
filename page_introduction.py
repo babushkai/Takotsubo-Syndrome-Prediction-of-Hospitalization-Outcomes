@@ -3,7 +3,7 @@
 """
 Created on Mon Mar 29 14:25:33 2021
 
-@author: Daisuke Kuwabara&Nesrine Benanteur  https://github.com/kwdaisuke/Long-Term-Prognosis-of-Patients-With-Takotsubo-Syndrome
+@author: Daisuke Kuwabara&Nesrine Benanteur  https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes
 """
 
 
@@ -22,8 +22,78 @@ def page_introduction():
   sns.set_theme(style="ticks")
   sns.set_style("whitegrid")
   
-  path_dk = "/content/drive/MyDrive/Takotsubo_Prognosis/Data/modified_data.csv"
-  df = pd.read_csv(path_dk)
+  path_dk = "/content/drive/MyDrive/Takotsubo_Prognosis/Tako Final Nes.xlsx"
+  path = "/content/Tako Final Nes.xlsx"
+  df = pd.read_excel(path_dk)
+  PATIENT_WITHNAN = [106, 119, 120, 122,124] 
+  df_nonfill = df[df.index.isin(PATIENT_WITHNAN)]
+  df=df[~df.index.isin(PATIENT_WITHNAN)]
+  df.rename(columns=
+                  {"DDN": "birthdate", 
+                  "âge": "age",
+                   "Date hospit initiale": "hospitalisation_date",
+                   "Homme": "sex", 
+                   "poids": "weight", 
+                   "taille": "height",
+                   "IMC ( kg/ cm2)": "BMI",
+                   "ATCD dépression/axiété": "depression_anxiety_history", 
+                   "ATCD psychiatrique": "mental_illness_history", 
+                   "patho neurologiques": "neurological_pathologies",
+                   "HTA": "hypertension",
+                   "Dyslipidémie": "dyslipidemia", 
+                   "Tabac": "smoking", 
+                   "Diabète": "diabetes",
+                   "IRC": "chronic_kidney_disease", 
+                   "AVC/AIT": "stroke_TIA", 
+                   "ATCD Cancer": "cancer_history", 
+                   "Cancer actif": "cancer",
+                   "BPCO/asthme": "COPD_asthma", 
+                   "Facteurs de stress": "stress_trigger",
+                   "Stress émotionnel": "emotional_stress", 
+                   "stress physique": "physical_stress", 
+                   "type stress physique":"physical_stress_type",
+                   "ICM Code":"ICM_Code",
+                   "BB": "beta_blockers", 
+                   "ARA II": "ARA_II",
+                   "Aspirine": "aspirin",                   
+                   "anti P2Y12": "anti_P2Y12",
+                   "Anticoagulation orale": "oral_anticoagulation", 
+                   "statines": "statin",
+                   "antidépresseur / anxiolytiques": "antidepressant", 
+                   "Forme apicale": "apical_type", 
+                   "médio-ventriculaire": "mid_ventricular",
+                   "autre": "other", 
+                  "FEVG admission": "entry_LVEF",
+                   "FEVG suivi": "out_LVEF", 
+                   "atteinte VD": "RV_harm",
+                   "ST +": "ST_positive", 
+                   "QT long": "Long_QT", 
+                   "ondes T -": "Tneg_waves",
+                   "tropo entrée": "entry_troponin",                   
+                   "pic tropo": "troponin_peak",
+                   "NT pro-BNP": "NT_proBNP", 
+                   "Coronarographie": "coronarography",
+                   "Lésions coronariennes sign": "coronary_disease", 
+                   "Coronaires lisses": "healthy_coronary", 
+                   " Insuffisance cardiaque": "heart_failure",
+                   "Aythmies atriales": "atrium_arrhythmia",
+                    "arythmies ventriculaires": "ventricle_arrhythmia",
+                   "thrombus VG": "thrombus_LV",
+                    "choc cardio": "cardiogenic_shock",
+                   "décès hospit": "hospital_death", 
+                   "BB sortie": "beta_blockers", 
+                   "IEC sortie": "IEC",
+                   "ARA II sortie": "ARA_II",
+                    "aspirine": "aspirin",
+                   "Anti P2Y12": "anti_P2Y12",
+                    "Anticoag": "oral_anticoagulation",
+                   "statines.1": "statin", 
+                   "antidepresseur": "antidepressant" 
+                   ,"COVID +": "Covid_positive", 
+                   "ATCD Cardio": "Cardio_history", 
+                   "alcoolisme": "alcoolism"
+                   }, inplace=True)
+
   
 
   #st.set_page_config(layout="wide")
@@ -46,100 +116,114 @@ def page_introduction():
     st.write(df.head())
 
   with st.beta_container():
-    st.header("1. Demographics")
+    st.subheader("1. Demographics")
   ################################
   st.write("")
-  row1, row2, row3 = st.beta_columns(3)
+  row1, row2, row3, row4= st.beta_columns(4)
 
   with row1, _lock:
-    st.write("We can observe many patients are at age of around 60 to 80")
     def age_box():
       fig,ax = plt.subplots()
-      with st.echo(): 
-        sns.boxplot(x="age", hue="sex", data=df)
-        plt.title("Patient's age", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
+      sns.boxplot(x="age", hue="sex", data=df, width=.6)
+      plt.title("Patient's age", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
       return fig
 
     plot=age_box()
     st.pyplot(plot, clear_figure=True)
 
   with row2, _lock:
-    st.write("We can observe BMI value is around 20 to 30")
+    def patient_Age():
+      fig2,ax = plt.subplots()
+      patient_description = df.loc[:, "birthdate": "BMI"] # Make a dataframe with the patient description
+      patient_description.BMI = patient_description.BMI.replace("#DIV/0!", np.nan) # replace by 0 Note that inplace=True doesn't work(regex problem)
+      sns.histplot(data=patient_description, x = "age", hue="sex",  multiple="stack")  
+      plt.title("Patient's age distribution", fontsize=12, fontweight="bold")
+      return fig2
+    plot=patient_Age()
+    st.pyplot(plot, clear_figure=True)
+    
+  with row3, _lock:
     def BMI_hist():
       fig2,ax = plt.subplots()
-      with st.echo(): 
-        sns.histplot(x="BMI",data=df, kde=True)
-        plt.title("Patient's BMI", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
+      patient_description = df.loc[:, "birthdate": "BMI"] # Make a dataframe with the patient description
+      patient_description.BMI = patient_description.BMI.replace("#DIV/0!", np.nan) # replace by 0 Note that inplace=True doesn't work(regex problem)
+      sns.histplot(x="BMI",data=patient_description, kde=True)
+      plt.title("Patient's BMI", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
       return fig2
     plot=BMI_hist()
     st.pyplot(plot, clear_figure=True)
 
-  with row3, _lock:
-    st.write("We can observe BMI value is around 20 to 30")
-    def BMI_hist():
+  with row4, _lock:
+    def age_BMI():
       fig,ax = plt.subplots()
-      with st.echo(): 
-        sns.scatterplot(x="age", y="BMI",data=df[df.BMI.notnull()],  s=50, edgecolor="black", linewidth=0.5,legend=False)    
-        plt.title("age vs BMI", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
+      patient_description = df.loc[:, "birthdate": "BMI"] # Make a dataframe with the patient description
+      patient_description.BMI = patient_description.BMI.replace("#DIV/0!", np.nan) # replace by 0 Note that inplace=True doesn't work(regex problem)
+      bins = [-np.inf, 16, 18, 25, 30, np.inf] # Set lower and upper bound as infinity
+      BMI_range = pd.cut(patient_description.BMI, bins, labels = "1 2 3 4 5".split(" "))
+      patient_description["BMI_range"]  = BMI_range 
+      sns.scatterplot(data=patient_description, x = "age", y = "BMI", hue="BMI_range", s=50, edgecolor="black", markers="BMI_range")
+      L=plt.legend(loc="best")#, labels=['BMI: ~16', 'BMI: 16-18', 'BMI: 18-25', "BMI: 25-30","BMI: 30 ~"])
+      L.get_texts()[0].set_text("BMI: ~16") ; L.get_texts()[1].set_text("BMI: 16-18") ; L.get_texts()[2].set_text("BMI: 18-25") ; L.get_texts()[3].set_text("BMI: 25-30") ; L.get_texts()[4].set_text("BMI: 30 ~")
+      plt.title("Patient's BMI vs age in each BMI group", fontsize=13, fontweight="bold")
       return fig
-    st.pyplot(BMI_hist(), clear_figure=True)
+    st.pyplot(age_BMI(), clear_figure=True)
   ############################################
 
-  with st.beta_container():
-    st.header("2. Medical History")
-  st.write("")
+  # with st.beta_container():
+  # st.write("")
   row1, row2, row3 = st.beta_columns(3)
 
   with row1, _lock:
+    st.subheader("2. Medical History")
     cardio_history_alcoolisme = df.iloc[:, -2:].fillna(0)
     medical_history = pd.concat([df.loc[:, "depression_anxiety_history":"COPD_asthma"], cardio_history_alcoolisme], axis=1)
     dff = medical_history.sum().sort_values().reset_index().rename(columns={"index": "col", 0:"values"})
     dff.sort_values("values", inplace=True, ascending=False)
     def medical_hist_sum():
       fig,ax = plt.subplots()
-      with st.echo():
-        sns.barplot(x="col", y="values", data=dff, order=dff["col"])
-        plt.xticks(rotation=90)
+      sns.barplot(x="col", y="values", data=dff, order=dff["col"])
+      plt.xticks(rotation=90)
       return fig
     st.pyplot(medical_hist_sum(), clear_figure=True)
 
   with row2, _lock:
-    st.header("3. Treatment")
-    df.columns.get_loc("ttt entrée = ttt antérieur") # Get the integer index of the specified column
+    st.subheader("3. Treatment")
     treatment_before = df.iloc[: , 25: 33].replace(np.nan, 0) # Exclude ttt entrée = ttt antérieur
     treatment_after = df.iloc[:,  56:65].replace(np.nan, 0)
     treatment_before["anxiolytiques"] =0.0 # Add anxiolytiques for treatment_before
     sum_treatment = pd.concat([treatment_before.sum(axis=0), treatment_after.sum(axis=0)], axis=1)
     sum_treatment.rename(columns = {0:"Total_Sum_Before ", 1:"Total_Sum_After"}, inplace=True)
     def Treatment_count():
-      fig2,ax = plt.subplots()
-      with st.echo(): 
-        ax = sum_treatment.plot.bar(figsize=(12, 7), rot=30)
-        for p in ax.patches:
-          ax.annotate(str(p.get_height()), (p.get_x() * 1.005, p.get_height() * 1.005))
+      fig,ax = plt.subplots()
+      axe = sum_treatment.plot.bar(figsize=(20, 12), rot=30, ax=ax)
+      for p in ax.patches:
+        axe.annotate(str(p.get_height()), (p.get_x() * 1.005, p.get_height() * 1.005))
         plt.title("Comparison of total count of respective treatment before and after the hospitalization", fontsize=14, fontweight="bold")
-      return fig2
-    st.pyplot(Treatment_count(), clear_figure=True)
+      return fig
+    plot=Treatment_count()
+    st.pyplot(plot, clear_figure=True)
 
-    with row3, _rock:
-      def correlation():
-        fig, ax = plt.subplots()
-        with st.echo():
-          treatment_before.iloc[:, :8].corr(method="kendall").style.background_gradient(cmap="coolwarm")
-          treatment_after.corr(method="kendall").style.background_gradient(cmap="coolwarm")
-        return fig
-      st.pyplot(corr_before(), clear_figure=True)
+    with row3, _lock:
+      st.subheader("4. Treatment's Correlation")
+      treatment_before = df.iloc[: , 25: 33].replace(np.nan, 0) # Exclude ttt entrée = ttt antérieur
+      treatment_after = df.iloc[:,  56:65].replace(np.nan, 0)
+      treatment_before["anxiolytiques"] =0.0 # Add anxiolytiques for treatment_before
+      sum_treatment = pd.concat([treatment_before.sum(axis=0), treatment_after.sum(axis=0)], axis=1)
 
+      from PIL import Image
+      image1 = Image.open('Image/BEFORE.png')
+      image2 = Image.open('Image/AFTER.png')
+      st.image(image1, caption='Correlation Before Inhospitalization',width=None)
+      st.image(image2, caption='Correlation After Inhospitalization',width=None)
+      #st.pyplot(treatment_after.corr(method="kendall").style.background_gradient(cmap="coolwarm"), clear_figure=True)
 
-
-
-  with st.beta_container():
-    st.header("4. LVEF")
+  #with st.beta_container(): 
   ################################
-  st.write("")
-  row1, row2, row3 = st.beta_columns(3)
+  #st.write("")
+  row1, row2, row3, row4= st.beta_columns(4)
 
   with row1, _lock:
+    st.subheader("5. LVEF")
     LVEF = df.loc[:, "entry_LVEF":"out_LVEF"]; LVEF = LVEF.astype("float") ; LVEF.out_LVEF =LVEF.out_LVEF.replace("NaN", np.nan)
     bin = [-np.inf, 40, 50, 55, np.inf]
     LVEF["entry_LVEF_category"] = pd.cut(LVEF.entry_LVEF, bin, labels = "1 2 3 4".split(" ")) ; LVEF.notnull().sum()
@@ -147,27 +231,28 @@ def page_introduction():
     
     def LVEF_diff():
       fig,ax = plt.subplots()
-      with st.echo(): 
-        diff.plot.hist() 
-        plt.title("Difference of LVEF", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
+      diff.plot.hist() 
+      plt.title("Difference of LVEF", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
       return fig
     plot=LVEF_diff()
     st.pyplot(plot, clear_figure=True)
 
   with row2, _lock:
+    st.subheader("6. Biomarkers")
     biomarkers = pd.concat([df.loc[:, "entry_troponin": "NT_proBNP"], df.iloc[:, 65]], axis=1) 
     biomarkers["NT_proBNP"] = biomarkers["NT_proBNP"].replace("23 289", "23289")  # Fill the blank 
+    
     def Biomarker():
-      fig2  ,ax = plt.subplots()
-      with st.echo(): 
-        biomarkers.troponin_peak.clip(biomarkers.troponin_peak.min(), upper_bound).plot.box()
-        biomarkers.NT_proBNP.astype("float").plot.box(figsize=(8, 6))
-        plt.title("Biomarker", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
-      return fig2
+      fig,ax = plt.subplots()
+      #biomarkers.troponin_peak.clip(biomarkers.troponin_peak.min(), upper_bound).plot.box()
+      biomarkers.NT_proBNP.astype("float").plot.box(figsize=(8, 6))
+      plt.title("Biomarker", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
+      return fig
     plot=Biomarker()
     st.pyplot(plot, clear_figure=True)
 
   with row3, _lock:
+    st.subheader("7.Coronarography")
     coronarography = df.loc[:, "coronarography": "healthy_coronary"]
     not_examined = coronarography[coronarography.coronarography == 0]
     yes_examined = coronarography[coronarography.coronarography == 1]
@@ -179,196 +264,18 @@ def page_introduction():
     coronarography_with_status = pd.concat([not_examined, yes_examined_disease, yes_examined_healthy], axis=0).sort_index()
     a = pd.DataFrame(coronarography_with_status.coronarography_status.value_counts()).T.not_examined
     b = pd.DataFrame(coronarography_with_status.coronarography_status.value_counts()).T[["healthy", "coronary_disease"]]
+
     def coronarography():
       fig,ax = plt.subplots()
-      with st.echo(): 
-        ax = pd.concat([pd.DataFrame(a), b], axis=0).plot(kind="bar", stacked=True)
-        ax.set_xticklabels(["non_examined", "examined"], rotation=30)   
-        plt.title("Coronarography", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
+      axe=pd.concat([pd.DataFrame(a), b], axis=0).plot(kind="bar", stacked=True, ax=ax)
+      axe.set_xticklabels(["non_examined", "examined"], rotation=30)   
+      plt.title("Coronarography", fontsize=14, fontname="Times New Roman Bold", fontweight="bold")
       return fig
     st.pyplot(coronarography(), clear_figure=True)
+
+  with row4, _lock:
+    st.subheader("8. Inhospital Consequences")
+    from PIL import Image
+    image = Image.open('Image/inhospital_consequences.png')
+    st.image(image, caption='Total Count of respective Inhospital Consequences',width=None)
   ############################################
-
-
-
-
-  # avriable = st.selectbox('box', df.columns)
-  # st.area_chart(df[variable])
-
-  # selected_col2=st.multiselect('Choose variables', df.columns)
-  # st.bar_chart(df[selected_col2])
-
-  # st.dataframe(df.describe().T)
-  # st.dataframe(df.style.highlight_null())
-
-  # st.sidebar.markdown("## Select Data Time and Detector")
-
-  # select_event = st.sidebar.selectbox("Which variables you want to see?",
-  #                                     list(df.columns))
-
-  # st.sidebar.markdown('## Set Plot Parameters')
-  # dtboth = st.sidebar.slider('Time Range (seconds)', 0.1, 18.0, 1.0)  # min, max, default
-  # dt = dtboth / 2.0
-  # st.bar_chart(df[select_event])
-  return 
-
-
-##################################################################
-
-
-# def page_introduction():
-    
-#     # Space so that 'About' box-text is lower
-#     st.sidebar.write("")
-#     st.sidebar.write("")
-#     st.sidebar.write("")
-#     st.sidebar.write("")
-#     st.sidebar.write("")
-#     st.sidebar.write("")
-#     st.sidebar.write("")
-#     st.sidebar.write("")
-    
-#     st.markdown("<h2 style='text-align: center;'> Welcome To </h2>", 
-#                 unsafe_allow_html=True)
-#     st.markdown("<h1 style='text-align: center;'> Distribution Analyser</h1>", 
-#                 unsafe_allow_html=True)
-     
-
-#     st.info("""
-#             There are two main features: \n
-#             - Explore distributions 
-#             - Fit distributions  
-#             $←$ To start playing with the app, select an option on the 
-#             left sidebar.
-#             """)
-#     st.info("""
-#             - Here is a youtube link to the [Distribution Analyser walkthrough](https://www.youtube.com/watch?v=6S0b7gFY36I&t=3s).
-#             - App snippets and brief descriptions ⮧
-#             """)
-
-
-#     image1 = "https://raw.githubusercontent.com/rdzudzar/DistributionAnalyser/main/images/Dist1.png?token=AIAWV2ZQOGWADUFWZM3ZWBLAN3CD6"
-#     image2 = "https://raw.githubusercontent.com/rdzudzar/DistributionAnalyser/main/images/Dist2.png?token=AIAWV27IFN4ZLN3EAONHMVLAN3BNS"
-#     image3 = "https://raw.githubusercontent.com/rdzudzar/DistributionAnalyser/main/images/Dist3.png?token=AIAWV25DCGRPJRFLDPQIWN3AN3BPA"
-#     image4 = "https://raw.githubusercontent.com/rdzudzar/DistributionAnalyser/main/images/Fit1.png?token=AIAWV2ZVPX4HJL77ZQRTIBDAN3BQK"
-#     image5 = "https://raw.githubusercontent.com/rdzudzar/DistributionAnalyser/main/images/Fit2.png?token=AIAWV27QFQIAEOQSRDQVC3DAN3BRQ"
-#     image6 = "https://raw.githubusercontent.com/rdzudzar/DistributionAnalyser/main/images/Fit3.png?token=AIAWV265V2EQ24SLCTLEHOTAN3BSQ"
-
-
-    
-#     def make_line():
-#         """ Line divider between images. """
-            
-#         line = st.markdown('<hr style="border:1px solid gray"> </hr>',
-#                 unsafe_allow_html=True)
-
-#         return line    
-
-
-#     # Images and brief explanations.
-#     st.error('Explore distributions')
-#     feature1, feature2 = st.beta_columns([0.5,0.4])
-#     with feature1:
-#         st.image(image1, use_column_width=True)
-#     with feature2:
-#         st.warning('Select Distribution')
-#         st.info("""
-#                 - Select distribution from Dropdown Menu (or type its name)
-#                 - Change distribution parameters on sliders and see the change. 
-#                 - Check created hyperlink to **SciPy** official documentation at the bottom of the sidebar.
-#                 """)
-    
-#     make_line()
-    
-#     feature3, feature4 = st.beta_columns([0.6,0.4])
-#     with feature3:        
-#         st.image(image2, use_column_width=True)
-#     with feature4:
-#         st.warning('Tweak Display')
-#         st.info("""
-#                 - Pick *Dark/Light Theme*
-#                 - Select **on/off** each option: Histogram, PDF, CDF, SF,
-#                 boxplot, quantiles, or shade 1/2/3 $\sigma$.
-#                 - Get Table with descriptive statistics.
-#                 """)
-#     make_line()
-    
-#     feature5, feature6 = st.beta_columns([0.6,0.4])
-#     with feature5:
-#         st.image(image3, use_column_width=True)
-#     with feature6:
-#         st.warning('Export')
-#         st.info("""
-#                 - Generate a Python code with selected distribution and 
-#                 parameters
-#                 - Save .py file or copy to clipboard to take it home.
-#                 """)
-    
-#     make_line()
-    
-#     st.error('Fit distributions')
-#     feature7, feature8 = st.beta_columns([0.4,0.6])
-#     with feature7:
-#         st.warning('Import')
-#         st.info("""
-#                 - Import a **.csv** file with your own data (or get a sample).
-#                 - Plot your data with or without basic statistical information.
-#                 """)
-#     with feature8:
-#         st.image(image4, use_column_width=True)
-    
-#     make_line()
-    
-#     feature9, feature10 = st.beta_columns([0.4,0.6])
-#     with feature9:
-#         st.warning('Fit')
-#         st.info("""
-#                 - Multiselectbox: pick any number of distributions
-#                 - **'All_distributions'** - select all
-#                 - Fit distribution(s) to your data
-#                 """)
-#     with feature10:
-#         st.image(image5, use_column_width=True)        
-    
-#     make_line()
-    
-#     feature10, feature11 = st.beta_columns([0.4,0.6])
-#     with feature10:
-#         st.warning('Results & Export')
-#         st.info("""
-#                 - Interactive **Figures**
-#                 - **Table** with all fitted distribution(s) 
-#                 - Generate **Python code** with best fit distribution 
-#                 """)
-#     with feature11:
-#         st.image(image6, use_column_width=True)      
-    
-#     make_line()
-    
-#     st.info('There are 100 continuous distribution functions  \
-#                 from **SciPy v1.6.1** available to play with.')
-        
-#     st.markdown("""
-                
-#                 - Abriviations:
-                
-#                     - PDF - Probability Density Function
-                
-#                     - CDF - Cumulative Density Function
-                
-#                     - SF - Survival Function
-                
-#                     - P(X<=x) - Probability of obtaining a value smaller than 
-#                                 x for selected x.
-                
-#                     - Empirical quantiles for a data array: 
-#                         Q1, Q2, Q3 respectively 0.25, 0.50, 0.75
-                              
-#                     - $\sigma$ (Standard Deviation). On plot shades: 
-#                         mean$\pm x\sigma$
-                        
-#                     - SSE - Sum of squared estimate of errors
-                
-#                 """)
-    
-#     return
