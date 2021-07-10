@@ -22,7 +22,7 @@ def page_introduction():
   sns.set_theme(style="ticks")
   sns.set_style("whitegrid")
   
-  path_dk = "/content/drive/MyDrive/Takotsubo_Prognosis/Tako Final Nes.xlsx"
+  path_dk = "data/Tako Final Nes.xlsx"
   path = "/content/Tako Final Nes.xlsx"
   df = pd.read_excel(path_dk)
   PATIENT_WITHNAN = [106, 119, 120, 122,124] 
