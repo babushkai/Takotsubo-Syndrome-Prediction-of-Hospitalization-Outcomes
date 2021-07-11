@@ -51,7 +51,7 @@ No epigenetics studies up to date.
 
 # How-To-Use
 
-This app is made to run on Google Cloud Platform using Virtual Machine called App Engine. App Engine is serverless framework which automatically scales itself and handle any amount of traffic. \
+This app is made to run on Google Cloud Platform using Virtual Machine called App Engine. App Engine is serverless framework which automatically scales itself and handle any amount of traffic. \\
 To know more about App Engine, check out this link(https://cloud.google.com/appengine)
 
 Implementation can be done simply through the following steps
@@ -67,4 +67,4 @@ cd Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes
 make gcloud-deploy
 ```
 
-`make gcloud-deploy` uses `app.yaml` file which creates App Engine and activate Dockerfile. Docker image is recorded Container Registry and be pused on App Engine accordingly.
+`make gcloud-deploy` uses `app.yaml` file which creates App Engine and activate Dockerfile. Docker image is recorded on Container Registry and be pused on App Engine accordingly.
