@@ -141,7 +141,7 @@ def page_explore():
       #   target="inhospital_consequences_encoded"
 
     elif engine=="LightGBM with Optuna":
-      import lightgbm as lgb
+    #   import lightgbm as lgb
       import numpy as np
       import sklearn.metrics
       from sklearn.model_selection import train_test_split
@@ -169,19 +169,19 @@ def page_explore():
         
         y = target
         train_x, valid_x, train_y, valid_y = train_test_split(X, y, test_size=0.25)
-        dtrain = lgb.Dataset(train_x, label=train_y)
-        param = { # Parameters Tuned with Optuna
-            "objective": "binary",
-            "metric": "binary_logloss",
-            "verbosity": -1,
-            "boosting_type": "gbdt",
-            "lambda_l1": 0.02793865122821334,
-            "lambda_l2": 6.826747702500326e-07,
-            "num_leaves": 153,
-            "feature_fraction": 0.5928088789054791,
-            "bagging_fraction": 0.47214401792490684,
-            "bagging_freq": 5,
-            "min_child_samples": 71,}
+        # dtrain = lgb.Dataset(train_x, label=train_y)
+        # param = { # Parameters Tuned with Optuna
+        #     "objective": "binary",
+        #     "metric": "binary_logloss",
+        #     "verbosity": -1,
+        #     "boosting_type": "gbdt",
+        #     "lambda_l1": 0.02793865122821334,
+        #     "lambda_l2": 6.826747702500326e-07,
+        #     "num_leaves": 153,
+        #     "feature_fraction": 0.5928088789054791,
+        #     "bagging_fraction": 0.47214401792490684,
+        #     "bagging_freq": 5,
+        #     "min_child_samples": 71,}
 
         st.text("Prediction has initiated")
         from sklearn.ensemble import RandomForestClassifier
@@ -215,20 +215,20 @@ def page_explore():
 
         y = df_imputed[target]
         train_x, valid_x, train_y, valid_y = train_test_split(X, y, test_size=0.25)
-        dtrain = lgb.Dataset(train_x, label=train_y)
-        param = { # Parameters Tuned with Optuna
-            "objective": "multiclass",
-            "metric": "multi_logloss",
-            "num_class": 254,
-            "verbosity": -1,
-            "boosting_type": "gbdt",
-            "lambda_l1": 0.02793865122821334,
-            "lambda_l2": 6.826747702500326e-07,
-            "num_leaves": 153,
-            "feature_fraction": 0.5928088789054791,
-            "bagging_fraction": 0.47214401792490684,
-            "bagging_freq": 5,
-            "min_child_samples": 71,}
+        # dtrain = lgb.Dataset(train_x, label=train_y)
+        # param = { # Parameters Tuned with Optuna
+        #     "objective": "multiclass",
+        #     "metric": "multi_logloss",
+        #     "num_class": 254,
+        #     "verbosity": -1,
+        #     "boosting_type": "gbdt",
+        #     "lambda_l1": 0.02793865122821334,
+        #     "lambda_l2": 6.826747702500326e-07,
+        #     "num_leaves": 153,
+        #     "feature_fraction": 0.5928088789054791,
+        #     "bagging_fraction": 0.47214401792490684,
+        #     "bagging_freq": 5,
+        #     "min_child_samples": 71,}
 
         from sklearn.ensemble import RandomForestRegressor
 

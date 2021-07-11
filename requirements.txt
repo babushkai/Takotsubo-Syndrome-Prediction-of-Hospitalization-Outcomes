@@ -9,3 +9,4 @@ seaborn
 scikit-learn
 lightgbm
 google-python-cloud-debugger
+openpyxl
