@@ -37,6 +37,13 @@ def main():
         page_explore - contains various functions that allows exploration of
                         continuous distribution; plotting class and export
     """
+    try:
+        import googleclouddebugger
+        googleclouddebugger.enable(
+            breakpoint_enable_canary=True
+        )
+    except ImportError:
+    pass
 
     pages = {
         "Visualization": page_introduction,

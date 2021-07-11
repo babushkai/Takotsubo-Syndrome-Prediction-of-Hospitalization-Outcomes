@@ -8,3 +8,4 @@ bokeh == 2.2.2
 seaborn
 scikit-learn
 lightgbm
+google-python-cloud-debugger
