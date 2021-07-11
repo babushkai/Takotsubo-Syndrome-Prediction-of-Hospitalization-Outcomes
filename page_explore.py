@@ -203,12 +203,8 @@ def page_explore():
         st.write(f"Your result is: ")
         if preds_newpatient<0.5:
           st.subheader("You have no heart failure")
-          image = Image.open('Image/love.png')
-          st.image(image)
         elif preds_newpatient>0.5:
           st.subheader("You might have heart failure")
-          image = Image.open('Image/angel.png')
-          st.image(image)
 
       elif target=="Inhospital Consequences":
         target="inhospital_consequences_encoded"
