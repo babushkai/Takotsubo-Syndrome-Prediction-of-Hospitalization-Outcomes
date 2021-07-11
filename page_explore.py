@@ -16,13 +16,6 @@ import time
 import base64
 from typing import List
 
-# Helper function imports
-# These are pre-computed so that they don't slow down the App
-from helper_functions import (distr_selectbox_names,
-                              stats_options,
-                              creating_dictionaries)
-
-
 def flatten(list2d):
   ls=[]
   for i in list2d:
