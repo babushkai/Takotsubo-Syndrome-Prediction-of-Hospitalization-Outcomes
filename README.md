@@ -51,7 +51,8 @@ No epigenetics studies up to date.
 
 # How-To-Use
 
-This app is made to run on Google Cloud Platform using Virtual Machine called App Engine. App Engine is serverless framework which automatically scales itself and handle any amount of traffic. \\
+This app is made to run on Google Cloud Platform using Virtual Machine called App Engine. App Engine is serverless framework which automatically scales itself and handle any amount of traffic.
+
 To know more about App Engine, check out this link(https://cloud.google.com/appengine)
 
 Implementation can be done simply through the following steps
