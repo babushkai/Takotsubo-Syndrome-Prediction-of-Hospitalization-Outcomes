@@ -43,7 +43,7 @@ def main():
             breakpoint_enable_canary=True
         )
     except ImportError:
-    pass
+        pass
 
     pages = {
         "Visualization": page_introduction,
