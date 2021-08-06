@@ -68,4 +68,4 @@ cd Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes
 make gcloud-deploy
 ```
 
-`make gcloud-deploy` uses `app.yaml` file which creates App Engine and activate Dockerfile. Docker image is recorded on Container Registry and be pused on App Engine accordingly.
+`make gcloud-deploy` uses `app.yaml` file which creates App Engine and activate Dockerfile. Docker image is recorded on Container Registry and be pushed to App Engine accordingly.
