@@ -74,4 +74,3 @@ make gcloud-deploy
 
 
 ![](https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes/blob/main/Image/appimage1.png)
-![](https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes/blob/main/Image/appimage2.png)
