@@ -59,8 +59,10 @@ Implementation can be done simply through the following steps
 
 1. Open Cloud Shell(Terminal on Google Cloud Platform)
 
-
 2. Clone this repository on Cloud Shell
+```
+git clone https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes.git
+```
 
 3. Deploy Docker image, push it on App Engine
 ```
@@ -69,3 +71,6 @@ make gcloud-deploy
 ```
 
 `make gcloud-deploy` uses `app.yaml` file which creates App Engine and activate Dockerfile. Docker image is recorded on Container Registry and be pushed to App Engine accordingly.
+
+
+![](https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes/blob/main/Image/appimage1.png)
