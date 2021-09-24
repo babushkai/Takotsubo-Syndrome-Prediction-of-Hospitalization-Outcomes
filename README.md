@@ -90,13 +90,13 @@ gcloud artifacts repositories create NAME \
     --description="Docker repository"
  ```
  
-4. Build a container image using ![Cloud Build](https://cloud.google.com/build)
+4. Build a container image using [Cloud Build](https://cloud.google.com/build)
 ```
  gcloud builds submit \
     --tag LOCATION-docker.pkg.dev/PROJECT_ID/hello-repo/helloworld-gke .
  ```
  5. Create a Google Kubernetes Engine cluster
-Using ![Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) mode, regional cluster
+Using [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) mode, regional cluster
  ```
  gcloud container clusters create-auto helloworld-gke \
     --region COMPUTE_REGION
