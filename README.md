@@ -12,7 +12,7 @@ Cases study seem to show that linkage include:
 -	Psychological distress (fear of being infected, economy worry, social distancing)
 -	Medical history (comorbidities)
 
-Biomarkers studied in cases reports are the same than in classic Takotsubo. 
+Biomarkers studied in cases reports are the same as in classic Takotsubo. 
 
 ## Ideas for the analysis (depending on the data we can get) :
 
