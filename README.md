@@ -51,6 +51,7 @@ No epigenetics studies up to date.
 
 # How-To-Use
 
+## Serverless Framework
 This app is made to run on Google Cloud Platform using Virtual Machine called App Engine. App Engine is serverless framework which automatically scales itself and handle any amount of traffic.
 
 To know more about App Engine, check out this link(https://cloud.google.com/appengine)
@@ -72,5 +73,116 @@ make gcloud-deploy
 
 `make gcloud-deploy` uses `app.yaml` file which creates App Engine and activate Dockerfile. Docker image is recorded on Container Registry and be pushed to App Engine accordingly.
 
+## Scalable Serverless Framework
+1. Open Cloud Shell(Terminal on Google Cloud Platform)
+
+2. Clone this repository on Cloud Shell
+```
+git clone https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes.git
+```
+
+3. Create a repository 
+```
+gcloud artifacts repositories create NAME \
+    --project=PROJECT_ID \
+    --repository-format=docker \
+    --location=LOCATION \
+    --description="Docker repository"
+ ```
+ 
+4. Build a container image using [Cloud Build](https://cloud.google.com/build)
+```
+ gcloud builds submit \
+    --tag LOCATION-docker.pkg.dev/PROJECT_ID/hello-repo/helloworld-gke .
+ ```
+ 5. Create a Google Kubernetes Engine cluster
+Using [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) mode, regional cluster
+ ```
+ gcloud container clusters create-auto helloworld-gke \
+    --region COMPUTE_REGION
+ ```
+ 
+6. Verify if you have access to the cluster
+ ```
+ kubectl get nodes
+ ```
+ 
+7. Deploy an app
+The app has a front server that handles the web requests. \
+You defines the cluster resources needed to run the frontend in the new file, ```deployment.yaml```
+ ```
+ # This file configures the hello-world app which serves public web traffic.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloworld-gke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+      - name: hello-app
+        # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
+        # Replace $GCLOUD_PROJECT with your project ID.
+        image: $LOCATION-docker.pkg.dev/$GCLOUD_PROJECT/hello-repo/helloworld-gke:latest
+        # This app listens on port 8080 for web traffic by default.
+        ports:
+        - containerPort: 8080
+        env:
+          - name: PORT
+            value: "8080"
+ ```
+8. Deploy the resource to the cluster 
+ ```
+ kubectl apply -f deployment.yaml
+ ```
+ and track the status of the Deployment
+ ```
+ kubectl get deployments
+ ```
+9. After the Deployment is complete, you can see the Pods that the Deployment created:
+
+```
+kubectl get pods
+```
+
+
+10. Deploy a service
+
+```
+# The hello service provides a load-balancing proxy over the hello-app
+# pods. By specifying the type as a 'LoadBalancer', Kubernetes Engine will
+# create an external HTTP load balancer.
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+spec:
+  type: LoadBalancer
+  selector:
+    app: hello
+  ports:
+  - port: 80
+    targetPort: 8080
+```
+ 
+```
+kubectl apply -f service.yaml
+```
+
+```
+kubectl get services
+```
+
+11. View a deployed app
+```
+ http://EXTERNAL_IP
+```
 
 ![](https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes/blob/main/Image/appimage1.png)
