@@ -62,7 +62,7 @@ Implementation can be done simply through the following steps
 
 2. Clone this repository on Cloud Shell
 ```
-git clone https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes.git
+git clone git@github.com:kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes.git
 ```
 
 3. Deploy Docker image, push it on App Engine
@@ -78,7 +78,7 @@ make gcloud-deploy
 
 2. Clone this repository on Cloud Shell
 ```
-git clone https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes.git
+git clone git@github.com:kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes.git
 cd Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes
 ```
 
