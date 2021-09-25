@@ -97,7 +97,7 @@ LOCATION=asia-east1
 
 Create a repository 
 ```
-gcloud artifacts repositories create hello-repo \
+gcloud artifacts repositories create takotsubo-repo \
     --project=$PROJECT_ID \
     --repository-format=docker \
     --location=$LOCATION \
@@ -107,13 +107,13 @@ gcloud artifacts repositories create hello-repo \
 4. Build a container image using [Cloud Build](https://cloud.google.com/build)
 ```
  gcloud builds submit \
-    --tag LOCATION-docker.pkg.dev/PROJECT_ID/takotsubo-repo/takotsubo-gke .
+    --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/takotsubo-repo/takotsubo-gke .
  ```
  5. Create a Google Kubernetes Engine cluster
 Using [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) mode, regional cluster
  ```
- gcloud container clusters create-auto auto-gke \
-    --region COMPUTE_REGION
+ gcloud container clusters create-auto auto-gke 
+    --region $LOCATION
  ```
  
 6. Verify if you have access to the cluster
@@ -144,7 +144,7 @@ spec:
       - name: takotsubo-gke
         # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
         # Replace $GCLOUD_PROJECT with your project ID.
-        image: $LOCATION-docker.pkg.dev/$GCLOUD_PROJECT/takotsubo-repo/takotsubo-gke:latest
+        image: $LOCATION-docker.pkg.dev/$PROJECT_ID/takotsubo-repo/takotsubo-gke:latest
         # This app listens on port 8080 for web traffic by default.
         ports:
         - containerPort: 8080
