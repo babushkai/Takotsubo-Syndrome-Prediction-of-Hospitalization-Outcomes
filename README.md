@@ -111,7 +111,7 @@ gcloud artifacts repositories create takotsubo-repo \
  5. Create a Google Kubernetes Engine cluster
 Using [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) mode, regional cluster
  ```
- gcloud container clusters create-auto auto-gke 
+ gcloud container clusters create-auto auto-gke \
     --region $LOCATION
  ```
  
