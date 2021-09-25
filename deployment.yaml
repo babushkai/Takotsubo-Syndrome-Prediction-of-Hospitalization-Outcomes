@@ -17,7 +17,7 @@ spec:
       - name: takotsubo-gke
         # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
         # Replace $GCLOUD_PROJECT with your project ID.
-        image: asia-east1-docker.pkg.dev/groovy-groove-326910/hello-repo/takotsubo-gke:latest
+        image: asia-east1-docker.pkg.dev/groovy-groove-326910/takotsubo-repo/takotsubo-gke:latest
         # This app listens on port 8080 for web traffic by default.
         ports:
         - containerPort: 8080

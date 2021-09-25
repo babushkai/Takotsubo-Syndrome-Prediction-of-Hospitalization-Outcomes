@@ -170,7 +170,7 @@ kubectl get pods
 10. Deploy a service
 
 ```
-# The hello service provides a load-balancing proxy over the hello-app
+# The takotsubo service provides a load-balancing proxy over the takotsubo-app
 # pods. By specifying the type as a 'LoadBalancer', Kubernetes Engine will
 # create an external HTTP load balancer.
 apiVersion: v1
