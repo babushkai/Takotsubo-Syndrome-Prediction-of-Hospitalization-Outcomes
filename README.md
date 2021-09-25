@@ -79,6 +79,7 @@ make gcloud-deploy
 2. Clone this repository on Cloud Shell
 ```
 git clone https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes.git
+cd Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes
 ```
 
 3. Create a repository 
