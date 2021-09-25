@@ -83,7 +83,7 @@ git clone https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospital
 
 3. Create a repository 
 ```
-gcloud artifacts repositories create NAME \
+gcloud artifacts repositories create hello-repo \
     --project=PROJECT_ID \
     --repository-format=docker \
     --location=LOCATION \
@@ -93,7 +93,7 @@ gcloud artifacts repositories create NAME \
 4. Build a container image using [Cloud Build](https://cloud.google.com/build)
 ```
  gcloud builds submit \
-    --tag LOCATION-docker.pkg.dev/PROJECT_ID/hello-repo/takotsubo-gke .
+    --tag LOCATION-docker.pkg.dev/PROJECT_ID/takotsubo-repo/takotsubo-gke .
  ```
  5. Create a Google Kubernetes Engine cluster
 Using [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) mode, regional cluster
@@ -127,10 +127,10 @@ spec:
         app: takotsubo
     spec:
       containers:
-      - name: takotsubo-app
+      - name: takotsubo-gke
         # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
         # Replace $GCLOUD_PROJECT with your project ID.
-        image: $LOCATION-docker.pkg.dev/$GCLOUD_PROJECT/hello-repo/takotsubo-gke:latest
+        image: $LOCATION-docker.pkg.dev/$GCLOUD_PROJECT/takotsubo-repo/takotsubo-gke:latest
         # This app listens on port 8080 for web traffic by default.
         ports:
         - containerPort: 8080
@@ -156,7 +156,7 @@ kubectl get pods
 10. Deploy a service
 
 ```
-# The takostubo service provides a load-balancing proxy over the takotsubo-app
+# The hello service provides a load-balancing proxy over the hello-app
 # pods. By specifying the type as a 'LoadBalancer', Kubernetes Engine will
 # create an external HTTP load balancer.
 apiVersion: v1
@@ -172,17 +172,40 @@ spec:
     targetPort: 8080
 ```
  
+Create service and the endpoint
 ```
 kubectl apply -f service.yaml
 ```
 
+Get the external IP address of the Service
 ```
 kubectl get services
 ```
 
 11. View a deployed app
 ```
- http://EXTERNAL_IP
+ http://EXTERNAL_IP 
 ```
+Or, you can make a ```curl``` call to the external IP address of the Service:
+
+```
+curl http://EXTERNAL_IP 
+```
+
+12. Cleanup
+To delete a cluster using the gcloud command-line tool, run the following command for the mode that you used:
+```
+gcloud container clusters delete takotsubo-gke  \
+    --zone COMPUTE_ZONE
+```
+
+To delete an image in your Artifact Registry repository, run the following command:
+```
+gcloud artifacts docker images delete \
+    asia-east1-docker.pkg.dev/groovy-groove-326910/takotsubo-repo/takotsubo-gke
+
+```
+
+
 
 ![](https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes/blob/main/Image/appimage1.png)
