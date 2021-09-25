@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helloworld-gke
+  name: auto-gke
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello
+      app: takotsubo
   template:
     metadata:
       labels:
-        app: hello
+        app: takotsubo
     spec:
       containers:
-      - name: hello-app
+      - name: takotsubo-gke
         # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
         # Replace $GCLOUD_PROJECT with your project ID.
-        image: east-asia1-docker.pkg.dev/groovy-groove-32691/hello-repo/helloworld-gke:latest
+        image: asia-east1-docker.pkg.dev/groovy-groove-326910/hello-repo/takotsubo-gke:latest
         # This app listens on port 8080 for web traffic by default.
         ports:
         - containerPort: 8080
