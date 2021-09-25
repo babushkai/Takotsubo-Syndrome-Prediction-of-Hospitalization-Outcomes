@@ -124,7 +124,7 @@ Using [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autop
 The app has a front server that handles the web requests. \
 You defines the cluster resources needed to run the frontend in the new file, ```deployment.yaml```
  ```
- # This file configures the takotsubo app which serves public web traffic.
+# This file configures the hello-world app which serves public web traffic.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -142,7 +142,7 @@ spec:
       containers:
       - name: takotsubo-gke
         # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
-        # Replace $GCLOUD_PROJECT with your project ID.
+        # Replace $PROJECT_ID with your project ID.
         image: $LOCATION-docker.pkg.dev/$PROJECT_ID/takotsubo-repo/takotsubo-gke:latest
         # This app listens on port 8080 for web traffic by default.
         ports:
@@ -150,6 +150,7 @@ spec:
         env:
           - name: PORT
             value: "8080"
+
  ```
 8. Deploy the resource to the cluster 
  ```
