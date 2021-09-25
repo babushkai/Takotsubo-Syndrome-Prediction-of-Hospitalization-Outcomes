@@ -93,12 +93,12 @@ gcloud artifacts repositories create NAME \
 4. Build a container image using [Cloud Build](https://cloud.google.com/build)
 ```
  gcloud builds submit \
-    --tag LOCATION-docker.pkg.dev/PROJECT_ID/hello-repo/helloworld-gke .
+    --tag LOCATION-docker.pkg.dev/PROJECT_ID/hello-repo/takotsubo-gke .
  ```
  5. Create a Google Kubernetes Engine cluster
 Using [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) mode, regional cluster
  ```
- gcloud container clusters create-auto helloworld-gke \
+ gcloud container clusters create-auto auto-gke \
     --region COMPUTE_REGION
  ```
  
@@ -111,26 +111,26 @@ Using [Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autop
 The app has a front server that handles the web requests. \
 You defines the cluster resources needed to run the frontend in the new file, ```deployment.yaml```
  ```
- # This file configures the hello-world app which serves public web traffic.
+ # This file configures the takotsubo app which serves public web traffic.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helloworld-gke
+  name: auto-gke
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello
+      app: takotsubo
   template:
     metadata:
       labels:
-        app: hello
+        app: takotsubo
     spec:
       containers:
-      - name: hello-app
+      - name: takotsubo-app
         # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
         # Replace $GCLOUD_PROJECT with your project ID.
-        image: $LOCATION-docker.pkg.dev/$GCLOUD_PROJECT/hello-repo/helloworld-gke:latest
+        image: $LOCATION-docker.pkg.dev/$GCLOUD_PROJECT/hello-repo/takotsubo-gke:latest
         # This app listens on port 8080 for web traffic by default.
         ports:
         - containerPort: 8080
@@ -156,17 +156,17 @@ kubectl get pods
 10. Deploy a service
 
 ```
-# The hello service provides a load-balancing proxy over the hello-app
+# The takostubo service provides a load-balancing proxy over the takotsubo-app
 # pods. By specifying the type as a 'LoadBalancer', Kubernetes Engine will
 # create an external HTTP load balancer.
 apiVersion: v1
 kind: Service
 metadata:
-  name: hello
+  name: takotsubo
 spec:
   type: LoadBalancer
   selector:
-    app: hello
+    app: takotsubo
   ports:
   - port: 80
     targetPort: 8080
