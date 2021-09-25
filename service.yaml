@@ -8,7 +8,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: hello
+    app: takotsubo
   ports:
   - port: 80
     targetPort: 8080
