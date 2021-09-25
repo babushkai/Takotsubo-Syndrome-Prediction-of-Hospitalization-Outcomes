@@ -82,12 +82,25 @@ git clone https://github.com/kwdaisuke/Takotsubo-Syndrome-Prediction-of-Hospital
 cd Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes
 ```
 
-3. Create a repository 
+3. Create a artifacts repository
+4. 
+get project
+```
+gcloud config get-value project
+```
+
+set project, location
+```
+PROJECT_ID=
+LOCATION=asia-east1
+```
+
+Create a repository 
 ```
 gcloud artifacts repositories create hello-repo \
-    --project=PROJECT_ID \
+    --project=$PROJECT_ID \
     --repository-format=docker \
-    --location=LOCATION \
+    --location=$LOCATION \
     --description="Docker repository"
  ```
  
