@@ -58,7 +58,7 @@ To know more about App Engine, check out this link(https://cloud.google.com/appe
 
 Implementation can be done simply through the following steps
 
-1. Open Cloud Shell(Terminal on Google Cloud Platform)
+1. [Open Cloud Shell](https://console.cloud.google.com/home/dashboard?cloudshell=true&_ga=2.225119257.208926025.1632462617-719425654.1632462579)(Terminal on Google Cloud Platform)
 
 2. Clone this repository on Cloud Shell
 ```
@@ -74,7 +74,7 @@ make gcloud-deploy
 `make gcloud-deploy` uses `app.yaml` file which creates App Engine and activate Dockerfile. Docker image is recorded on Container Registry and be pushed to App Engine accordingly.
 
 ## Scalable Serverless Framework
-1. Open Cloud Shell(Terminal on Google Cloud Platform)
+1. [Open Cloud Shell](https://console.cloud.google.com/home/dashboard?cloudshell=true&_ga=2.225119257.208926025.1632462617-719425654.1632462579)(Terminal on Google Cloud Platform)
 
 2. Clone this repository on Cloud Shell
 ```
