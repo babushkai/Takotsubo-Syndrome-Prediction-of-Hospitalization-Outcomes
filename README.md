@@ -83,7 +83,6 @@ cd Takotsubo-Syndrome-Prediction-of-Hospitalization-Outcomes
 ```
 
 3. Create a artifacts repository
-4. 
 get project
 ```
 gcloud config get-value project
